@@ -1,0 +1,29 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Comment {
+  createdAt DateTime @default(now())
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  updatedAt DateTime @updatedAt
+}
+
+model Blog {
+  blogEvents BlogEvent[]
+  createdAt  DateTime    @default(now())
+  id         String      @id @default(auto()) @map("_id") @db.ObjectId
+  updatedAt  DateTime    @updatedAt
+}
+
+model BlogEvent {
+  blog      Blog?    @relation(fields: [blogId], references: [id])
+  blogId    String?  @db.ObjectId
+  createdAt DateTime @default(now())
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  updatedAt DateTime @updatedAt
+}
